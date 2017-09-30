@@ -79,3 +79,27 @@ Depending on your implementation, you should, at a minimum, save some sort of mo
   }]
 }
 ```
+This allows you to hit the `getScopedClientToken()` endpoint with the saved `particleCustomerEmail`. This is needed to stream data in the later steps.
+
+## Streaming Steps
+Streaming is considerably easier to do than provisioning.
+
+### 1) particle-server-provision.js -- `getScopedClientToken()`
+Just like in provisioning, get a `scopedToken` limited to your `Customer`. Again, this limits them from only accessing devices assigned to them.
+
+### 2) particle-streaming.js -- `getParticleStream()`
+Providing the `deviceId` of the Device you're looking to stream from, along with your `scopedToken`, this function will return a stream object that emits 'events'.
+
+Example:
+```js
+// In implmentation, use like so:
+stream.on('event', function (data) {
+  // Every time the device publishes data, the callback gets called
+  callback(null, data)
+})
+```
+
+These Events are pushed from your Photon, through the Particle Cloud, into the Client where this object livs.
+
+### 3) (Optional, Sending Commands to Photon) particle-streaming.js -- `toggleStream()`
+This function is an example of sending commands to a custom Photon endpoint you've created. Using `particle.callFunction()`, commands can be send through the Particle Cloud to your Photon. Obviously, you can have this do anything on your Photon.
