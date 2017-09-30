@@ -1,7 +1,7 @@
 # Particle Device Provisioning/Data Streaming
 This repo gives an outline of the process of provisioning and streaming Particle Photon devices using Particle Cloud and NodeJS. It allows you to use the [two legged authentication model](https://docs.particle.io/guide/how-to-build-a-product/authentication/#two-legged-authentication), giving the benefit of streaming data directly to/from the client, while scoping the client to only their Particle Devices.
 
-## Steps:
+## Provisioning Steps:
 ### 1) particle-server-provision.js -- `initializeParticleProvision()`
 In order to provision a Particle `Device` for a Particle `Customer`, a `Customer` must exist. Calling `ensureCustomerExists()` looks for the existence of the provided `Customer`'s email -- and if they don't exist, they're created.
 
@@ -68,3 +68,14 @@ Doing this sets wifi information on the Particle, which it will attempt to conne
 
 Finally, the `connectToWifi()` function tells the Photon to connect to the client credentials we set on the Photon. You could also hit the reset button the Particle to achieve this.
 
+### 5) Saving Customer Information
+Depending on your implementation, you should, at a minimum, save some sort of model of your user that looks roughly like this:
+```js
+{
+  myAppClient,
+  particleCustomerEmail,
+  particleDevices: [{
+    deviceId
+  }]
+}
+```
